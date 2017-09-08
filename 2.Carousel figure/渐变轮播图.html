@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin:0;
+				padding:0;
+			}
+			img{
+				width:800px;
+				height:300px;
+			}
+			#cimg>li{
+				list-style: none;
+				position:absolute;
+				display:none;
+			}
+			#cimg>li:nth-child(1){
+				display: block;
+				
+			}
+			ul{
+				height:300px;
+				width:4800px;
+			}
+			#box{
+				position:relative;
+				width:800px;
+				height:300px;
+				left:200px;
+				top:50px;
+				overflow: hidden;
+			}
+			#hLeft{
+				position:absolute;
+				width:40px;
+				height:100px;
+				background: gray;
+				opacity: 0.5;
+				left:0;
+				top:100px;
+				text-align: center;
+				line-height:100px;
+				font-size: 50px;
+				cursor:pointer;	
+				z-index:999;		
+			}
+			#hRight{
+				position:absolute;
+				width:40px;
+				height:100px;
+				background: gray;
+				opacity: 0.5;
+				right:0;
+				top:100px;
+				text-align: center;
+				line-height:100px;
+				font-size: 50px;
+				cursor:pointer;
+				z-index:999;
+			}
+			#promoNav{
+				width:190px;
+				height:40px;
+				position: absolute;
+				bottom:0;
+				left:300px;	
+				background:#fff;
+				opacity: 0.5;
+				padding-left:10px;
+				border-radius: 20px;	
+				z-index:999;
+			}
+			#promoNav>li{
+				height:20px;
+				width:20px;
+				margin-right:10px;
+				text-align: center;
+				background: orange;
+				margin-top:10px;
+				border-radius: 50%;
+				cursor:pointer;
+				float:left;
+				list-style: none;
+			}
+			#promoNav>.tLi{
+				background:red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul id="cimg">
+				<li><img src="img/dzq1.jpg"/></li>
+				<li><img src="img/dzq2.jpg"/></li>
+				<li><img src="img/dzq3.jpg"/></li>
+				<li><img src="img/dzq4.jpg"/></li>
+				<li><img src="img/dzq5.jpg"/></li>
+				<li><img src="img/dzq6.jpg"/></li>
+			</ul>
+			<div id="hLeft"><</div>
+			<div id="hRight">></div>
+			<ul id="promoNav">
+				<li class="tLi">1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>
+			</ul>
+		</div>
+		<script type="text/javascript" src="js/jquery-2.1.0.js" ></script>
+		<script>
+			var box = $('#box');
+			var cimg = $('#cimg')
+			var i=1;
+			//渐变函数
+			var sports = function(){
+				if(i==6){
+					i=0;
+				}
+				cimg.children().fadeOut();
+				cimg.children().eq(i).fadeIn();
+				$('#promoNav').children().removeClass('tLi');
+				$('#promoNav').children().eq(i).addClass('tLi');
+				i++
+				
+				console.log(i);			
+			}
+			//按钮驱动函数
+			$('#promoNav').children().each(function(index){
+				$(this).on('click',function(){
+					console.log(index)
+					$('#promoNav').children().removeClass('tLi');
+					$('#promoNav').children().eq(index).addClass('tLi');
+					i=index;
+					sports();
+				})
+			})
+			var int = setInterval(sports,1000);
+			//划入暂停
+			box.on('mouseenter',function(){
+				console.log(1);
+				clearInterval(int)
+			})
+			box.on('mouseleave',function(){
+				clearInterval(int)
+				int = setInterval(sports,1000);
+			})
+			//左右按钮
+			$('#hLeft').click(function(){
+				i-=2;
+				sports();
+				if(i<=-1){
+					i=5;
+				}
+			})
+			$('#hRight').click(function(){
+				sports();
+			})
+		</script>
+	</body>
+</html>

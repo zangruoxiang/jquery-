@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			*{margin:0;padding:0;}
+			#father{
+				width:500px;
+				height:600px;
+				position: relative;
+				left:100px;
+				top:50px;
+			}
+			#box{
+				width:500px;
+				height:500px;
+				background:blue;
+				position: relative;
+				cursor:pointer;				
+			}
+			#little-box{
+				width:500px;
+				height:100px;
+			}
+			#little-box ul{
+				display: flex;
+				margin-top:5px;
+				justify-content: center;
+			}	
+			#little-box li{
+				list-style: none;
+				width:110px;
+				border:1px solid black;
+				margin-right:10px;
+				height:98px;
+				background:red;
+				cursor:pointer;
+			}
+			#little-box li:nth-last-child(1){
+				margin:0;
+			}
+			#big-box{
+				height:500px;
+				width:500px;
+				position: absolute;
+				left:550px;
+				top:000px;
+				display:none;
+				border:1px solid gray;
+				overflow: hidden;
+			}
+			#big-box img{
+				position:absolute;
+				top:-100px;
+				left:-100px;
+				width:500%;
+				height:500%;
+				right:0;
+				bottom:0;
+			}
+			#box img{width:100%;height:100%;}
+			#little-box img{width:100%;height:100%;}
+			.box-point{width:100px;height:100px;position: absolute;background:gray;opacity:0.5;top:0;display: none;pointer-events: none;}
+		</style>
+	</head>
+	<body>
+		<div id="father">			
+			<div id="box">
+				<img src="img/dzq.jpg"/>
+				<div class="box-point">
+					
+				</div>
+			</div>
+			<div id="little-box">
+				<ul>
+					<li><img src="img/dzq6.jpg"></li>
+					<li><img src="img/dzq1.jpg"></li>
+					<li><img src="img/dzq2.jpg"></li>
+					<li><img src="img/dzq3.jpg"></li>
+					<li><img src="img/dzq4.jpg"></li>
+					<li><img src="img/dzq5.jpg"></li>
+				</ul>
+			</div>
+			<div id="big-box">
+				<img src="img/dzq.jpg">
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-2.1.0.js" ></script>
+		<script>
+			$('#box').mouseenter(function(){
+				//pointer-events:none 允许鼠标点击穿透后面的元素
+				$('.box-point').css('display','block');
+				$('#big-box').css('display','block');
+				$('#box').on('mousemove',function(e){	
+					e=e||event;
+					e.stopPropagation();
+					$('.box-point').offset({
+						top:e.offsetY,
+						left:e.offsetX+($('.box-point').width()/2)
+					})
+					console.log($('.box-point').position().left)
+//					$('#big-box img').offset({
+//						top:($('.box-point').position().left/$('#box').height())*$('#big-box img').height(),
+//						left:($('.box-point').position().top/$('#box').width())*$('#big-box img').width()
+//					})
+					$('#big-box img').css('left',-($('.box-point').position().left/$('#box').width())*$('#big-box img').width());
+					$('#big-box img').css('top',-($('.box-point').position().top/$('#box').height())*$('#big-box img').height())
+					var rBoundary = e.offsetX+($('.box-point').width()/2)
+					//边界判断
+					if(e.offsetX+($('.box-point').width()/2)<=$('#box').offset().left){
+						$('.box-point').css('left',0);
+						$('#big-box img').css('left',0);
+					};
+					if(e.offsetY<=$('#box').offset().top){
+						$('.box-point').css('top',0);
+						$('#big-box img').css('top',0);
+					};
+					if(rBoundary>=$('#box').width()){
+						$('.box-point').css('left',$('#box').width()-$('.box-point').width());
+						$('#big-box img').css('left',-$('#big-box img').width()+$('#big-box').width());
+					}
+					if(e.offsetY+($('.box-point').height()/2)>=$('#box').height()){
+						$('.box-point').css('top',$('#box').height()-$('.box-point').height());
+						$('#big-box img').css('top',-$('#big-box img').height()+$('#big-box').height());
+					}
+					
+				})
+				
+			})
+			$('#box').mouseleave(function(){
+				//console.log(2);
+				$('.box-point').css('display','none');
+				$('#big-box').css('display','none');
+			})
+			//切图
+			$('#little-box').children().children().children().click(function(){
+				$('#big-box img').attr('src',this.src);
+				$('#box img').attr('src',this.src)
+				//console.log($('#big-box img'))
+			})
+			
+			
+		</script>
+	</body>
+</html>

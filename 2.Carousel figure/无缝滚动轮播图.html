@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin:0;
+				padding:0;
+			}
+			img{
+				width:800px;
+				height:300px;
+			}
+			li{
+				list-style: none;
+				float:left;
+			}
+			ul{
+				height:300px;
+				width:5600px;
+			}
+			#oUl{
+				position: relative;
+				
+				
+			}
+			#box{
+				position:relative;
+				width:800px;
+				height:300px;
+				left:200px;
+				top:50px;
+				overflow: hidden;
+			}
+			#hLeft{
+				position:absolute;
+				width:40px;
+				height:100px;
+				background: gray;
+				opacity: 0.5;
+				left:0;
+				top:100px;
+				text-align: center;
+				line-height:100px;
+				font-size: 50px;
+				cursor:pointer;			
+			}
+			#hRight{
+				position:absolute;
+				width:40px;
+				height:100px;
+				background: gray;
+				opacity: 0.5;
+				right:0;
+				top:100px;
+				text-align: center;
+				line-height:100px;
+				font-size: 50px;
+				cursor:pointer;
+			}
+			#promoNav{
+				width:190px;
+				height:40px;
+				position: absolute;
+				bottom:0;
+				left:300px;	
+				background:#fff;
+				opacity: 0.5;
+				padding-left:10px;
+				border-radius: 20px;	
+							
+			}
+			#promoNav>li{
+				height:20px;
+				width:20px;
+				margin-right:10px;
+				text-align: center;
+				background: orange;
+				margin-top:10px;
+				border-radius: 50%;
+				cursor:pointer;
+			}
+			#promoNav>.tLi{
+				background:red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul id="oUl">
+				<li><img src="img/dzq1.jpg"/></li>
+				<li><img src="img/dzq2.jpg"/></li>
+				<li><img src="img/dzq3.jpg"/></li>
+				<li><img src="img/dzq4.jpg"/></li>
+				<li><img src="img/dzq5.jpg"/></li>
+				<li><img src="img/dzq6.jpg"/></li>
+				<li><img src="img/dzq1.jpg"/></li>
+			</ul>
+			<div id="hLeft"><</div>
+			<div id="hRight">></div>
+			<ul id="promoNav">
+				<li class="tLi">1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>
+			</ul>
+		</div>
+		<script type="text/javascript" src="js/jquery-2.1.0.js" ></script>
+		<script>
+			var oUl = $('#oUl')
+			var k=1;
+			var i=1;
+			var down = true;
+			function sports(){
+				if(down==true){
+					down = false;
+					if(k==7){
+						//console.log(kkk)
+						i=0;
+						k=0;
+						//oUl.css('left',0);
+						oUl.animate({"left":0+'px'},0);
+						k++;
+						i++;
+					}
+					if(k<=-1){
+						i=7;
+						k=7;
+						//oUl.css('left','-4800px');
+						oUl.animate({"left":-4800+'px'},0);
+						k-=2;
+						i-=2;
+					}
+					if(i==6){
+						//console.log($("#promoNav").children().eq(0))
+						$("#promoNav").children().removeClass('tLi');
+						$("#promoNav").children().eq(0).addClass('tLi');
+						i=0;
+					}
+					oUl.animate({"left":-800*k+'px'});
+					//console.log(i)
+					$("#promoNav").children().removeClass('tLi');
+					$("#promoNav").children().eq(i).addClass('tLi');
+					k++;
+					i++;
+					down = true;
+				}			
+			}
+			var oGo = setInterval(sports,1000);
+			$('#box').on('mouseover',function(){			
+				clearInterval(oGo);
+			})
+			$('#box').on('mouseleave',function(){
+				oGo = setInterval(sports,1000);
+			})
+			$('#hLeft').on('click',function(){
+				if(down){
+					k-=2;
+					i-=2;
+					sports();					
+				}
+			})
+			$('#hRight').on('click',function(){
+				if(down){
+					sports();				
+				}
+			})
+			$("#promoNav").children().each(function(index){
+				$(this).on('click',function(){
+					$("#promoNav").children().removeClass('tLi');
+					$("#promoNav").children().eq(index).addClass('tLi');
+					k=index;
+					i=index;
+					sports();
+				})
+			})
+		</script>
+	</body>
+</html>
